@@ -1,5 +1,7 @@
 package ru.otus.spring.dao.csv;
 
+import jdk.nashorn.internal.ir.IfNode;
+import org.springframework.stereotype.Repository;
 import ru.otus.spring.dao.Dao;
 import ru.otus.spring.entity.User;
 import ru.otus.spring.exception.DaoException;
@@ -9,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class UserCsvDao<T> implements Dao<User> {
     private Map<Long, User> userRepository = new HashMap<>();
 
@@ -27,6 +30,12 @@ public class UserCsvDao<T> implements Dao<User> {
 
     @Override
     public User getById(long id) throws DaoException {
-        return userRepository.get(id);
+        User result = userRepository.get(id);
+
+        if (result == null) {
+            throw new DaoException(String.format("User with ID=%d not found", id));
+        }
+
+        return result;
     }
 }

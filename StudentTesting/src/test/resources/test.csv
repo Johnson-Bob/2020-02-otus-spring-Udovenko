@@ -1,0 +1,3 @@
+id,text,answers
+1,Test question 1?,A|The incorrect answer A|0;B|The incorrect answer B|0;C|The correct answer C|1;D|The incorrect answer D|0
+2,Test question 2?,A|||The incorrect answer A|0;;;B|The correct answer B|1;C|The incorrect answer C|0;D|The incorrect answer D|0

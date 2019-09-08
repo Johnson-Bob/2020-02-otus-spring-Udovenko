@@ -9,4 +9,5 @@ import ru.otus.spring.entity.User;
 public class ResultDto {
     private User user;
     private String result;
+    private boolean isTestPass;
 }
