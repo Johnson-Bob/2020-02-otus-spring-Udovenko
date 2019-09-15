@@ -1,16 +1,17 @@
 package ru.otus.spring.dao.csv;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Repository;
 import ru.otus.spring.dao.Dao;
 import ru.otus.spring.entity.Question;
 import ru.otus.spring.exception.DaoException;
 
+import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,24 +20,20 @@ import java.util.Map;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+@Repository
 public class QuestionCsvDao implements Dao<Question> {
-    private final Resource questionsResource;
+    @Value("classpath:#{i18nService.getMessage('questions.file')}")
+    private Resource questionsResource;
     private Map<Long, Question> questionRepository = new HashMap<>();
 
-    public QuestionCsvDao(String fileName) throws URISyntaxException {
-        this.questionsResource = new ClassPathResource(fileName, QuestionCsvDao.class.getClassLoader());
-    }
+    @PostConstruct
+    public void init(){
+        readFromFile();
+    };
 
     @Override
     public List<Question> getAll() throws DaoException {
-        List<Question> result;
-        if (questionRepository.isEmpty()) {
-            result = readFromFile();
-        } else {
-            result = new ArrayList<>(questionRepository.values());
-        }
-
-        return result;
+        return new ArrayList<>(questionRepository.values());
     }
 
     @Override
@@ -46,14 +43,20 @@ public class QuestionCsvDao implements Dao<Question> {
 
     @Override
     public Question getById(long id) throws DaoException {
-        return questionRepository.get(id);
+        Question result = questionRepository.get(id);
+
+        if (result == null) {
+            throw new DaoException(String.format("Question with ID=%d not found", id));
+        }
+
+        return result;
     }
 
     private void saveToRepository(List<Question> questions) {
         questionRepository = questions.stream().collect(toMap(Question::getId, identity()));
     }
 
-    private List<Question> readFromFile() {
+    void readFromFile() {
         List<Question> result;
         try {
             result = new CsvToBeanBuilder(new FileReader(questionsResource.getFile())).withType(Question.class).build().parse();
@@ -63,7 +66,5 @@ public class QuestionCsvDao implements Dao<Question> {
         } catch (IOException e) {
             throw new DaoException("Error when reading file", e);
         }
-
-        return result;
     }
 }

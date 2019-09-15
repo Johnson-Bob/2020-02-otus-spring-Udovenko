@@ -1,6 +1,8 @@
 package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.Dao;
 import ru.otus.spring.dto.AnswerDto;
 import ru.otus.spring.dto.ResultDto;
@@ -8,23 +10,31 @@ import ru.otus.spring.entity.Answer;
 import ru.otus.spring.entity.Question;
 import ru.otus.spring.entity.User;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class TestingServiceImpl implements TestingService {
     private final Dao<Question> questionDao;
     private final UserService userService;
 
     private Map<Long, Answer> correctAnswerCache;
     private int sumOfCorrectAnswers; //was too lazy to create a normal repository for answers. Sorry
+    @Value("${pass.test}")
+    private float testPass;
+
+    @PostConstruct
+    public void init() {
+        fillCorrectAnswerCache(questionDao.getAll());
+    }
 
     @Override
     public List<Question> getAllQuestion() {
         List<Question> questions = questionDao.getAll();
-        fillCorrectAnswerCache(questions);
         return questions;
     }
 
@@ -42,7 +52,10 @@ public class TestingServiceImpl implements TestingService {
         User user = userService.getUserById(userId);
         float percentOfCorrectAnswers = 100f * ((float) sumOfCorrectAnswers / getAllQuestion().size());
 
-        return ResultDto.builder().user(user).result(String.format("%.1f%%", percentOfCorrectAnswers)).build();
+        return ResultDto.builder()
+                .user(user)
+                .result(String.format("%.1f%%", percentOfCorrectAnswers))
+                .isTestPass(percentOfCorrectAnswers >= testPass).build();
     }
 
     private void fillCorrectAnswerCache(List<Question> questions) {
@@ -65,4 +78,6 @@ public class TestingServiceImpl implements TestingService {
         answerDto.setUserAnswerCorrect(Character.toUpperCase(answerDto.getUserAnswer()) == correctAnswer.getLetter());
         answerDto.setCorrectAnswer(correctAnswer);
     }
+
+
 }

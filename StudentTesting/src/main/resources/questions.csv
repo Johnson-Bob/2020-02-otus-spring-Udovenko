@@ -1,5 +1,5 @@
 id,text,answers
-1, What is a data type?,A|The calculator of the CPU|0;B|A portion of the main memory used to store data|0;C|A special scheme to represent values|1;D|The collection of variables that a program uses.|0
+1,What is a data type?,A|The calculator of the CPU|0;B|A portion of the main memory used to store data|0;C|A special scheme to represent values|1;D|The collection of variables that a program uses.|0
 2,What is a primitive data type in Java ?,A|A method to represent values that are so useful that they are an integral part of the language.|1;B|An easy way to represent numbers.|0;C|The part of Java that matches the older programming languages.|0;D|A data type that can not be used as part of an object.|0
 3,Does every variable in Java8 need a data type?,A|No – only numeric variables need a data type.|0;B|No – a data type is optional.|0;C|Yes – all variables are of the same data type.|0;D|Yes – every variable must be declared with its data type.|1
 4,What is NOT a name of a primitive data type in Java?,A|int|0;B|float|0;C|string|1
