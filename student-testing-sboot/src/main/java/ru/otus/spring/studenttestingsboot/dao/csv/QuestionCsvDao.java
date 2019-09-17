@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
+import ru.otus.spring.studenttestingsboot.annotation.UpdateCache;
 import ru.otus.spring.studenttestingsboot.dao.Dao;
 import ru.otus.spring.studenttestingsboot.entity.Question;
 import ru.otus.spring.studenttestingsboot.exception.DaoException;
@@ -28,7 +29,7 @@ public class QuestionCsvDao implements Dao<Question> {
 
     @PostConstruct
     public void init(){
-        readFromFile();
+        updateCache();
     };
 
     @Override
@@ -56,7 +57,9 @@ public class QuestionCsvDao implements Dao<Question> {
         questionRepository = questions.stream().collect(toMap(Question::getId, identity()));
     }
 
-    void readFromFile() {
+    @UpdateCache
+    @Override
+    public List<Question> updateCache() {
         List<Question> result;
         try {
             result = new CsvToBeanBuilder(new FileReader(questionsResource.getFile())).withType(Question.class).build().parse();
@@ -66,5 +69,7 @@ public class QuestionCsvDao implements Dao<Question> {
         } catch (IOException e) {
             throw new DaoException("Error when reading file", e);
         }
+
+        return result;
     }
 }

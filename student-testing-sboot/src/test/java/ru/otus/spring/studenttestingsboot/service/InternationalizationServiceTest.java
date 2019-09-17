@@ -52,7 +52,7 @@ class InternationalizationServiceTest {
     }
 
     @SpringBootConfiguration
-    public static class InternationalizationServiceTestConfig {
+    static class InternationalizationServiceTestConfig {
         @Bean
         public InternationalizationService i18nService() {
             return new InternationalizationService();

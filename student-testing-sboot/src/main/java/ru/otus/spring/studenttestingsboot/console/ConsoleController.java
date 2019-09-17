@@ -17,13 +17,14 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Controller
-public class ConsoleController implements AutoCloseable {
+public class ConsoleController {
 
     private final UserService userService;
     private final TestingService testingService;
     private final InternationalizationService i18nService;
     private User user;
     private Scanner scanner = new Scanner(System.in);
+    private ResultDto resultDto;
 
     public User createUser() {
         user = new User();
@@ -56,12 +57,13 @@ public class ConsoleController implements AutoCloseable {
             }
         }
 
-        return testingService.getTestResult(user.getId());
+        resultDto = testingService.getTestResult(user.getId());
+        return resultDto;
     }
 
-    public void printResult(ResultDto result) {
-        System.out.println(i18nService.getMessage("test.result", result.getUser().toString(), result.getResult()));
-        System.out.println(result.isTestPass() ? i18nService.getMessage("test.passed") : i18nService.getMessage("test.failed"));
+    public void printResult() {
+        System.out.println(i18nService.getMessage("test.result", resultDto.getUser().toString(), resultDto.getResult()));
+        System.out.println(resultDto.isTestPass() ? i18nService.getMessage("test.passed") : i18nService.getMessage("test.failed"));
     }
 
     private String printAndWait(String invite, Pattern pattern) {
@@ -73,10 +75,5 @@ public class ConsoleController implements AutoCloseable {
         } while (result == null);
 
         return result;
-    }
-
-    @Override
-    public void close() throws Exception {
-        scanner.close();
     }
 }
