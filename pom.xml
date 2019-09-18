@@ -12,5 +12,6 @@
 
     <modules>
         <module>student-testing</module>
+        <module>student-testing-sboot</module>
     </modules>
 </project>
