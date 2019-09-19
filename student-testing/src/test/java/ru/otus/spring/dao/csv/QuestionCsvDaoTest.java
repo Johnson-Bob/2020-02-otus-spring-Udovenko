@@ -1,6 +1,5 @@
 package ru.otus.spring.dao.csv;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.TestUtil;
-import ru.otus.spring.dao.Dao;
 import ru.otus.spring.entity.Question;
 import ru.otus.spring.exception.DaoException;
 import ru.otus.spring.service.InternationalizationService;

@@ -17,7 +17,6 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<junit-jupiter.version>5.5.1</junit-jupiter.version>
-		<mockito.version>3.0.0</mockito.version>
 	</properties>
 
 	<dependencies>
@@ -44,7 +43,7 @@
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
-					<groupId>org.junit</groupId>
+					<groupId>junit</groupId>
 					<artifactId>junit</artifactId>
 				</exclusion>
 				<exclusion>

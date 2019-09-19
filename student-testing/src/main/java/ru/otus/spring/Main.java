@@ -1,12 +1,9 @@
 package ru.otus.spring;
 
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import ru.otus.spring.dto.ResultDto;
 import ru.otus.spring.presentation.console.ConsoleController;
-
-import java.util.Properties;
 
 @Configuration
 @ComponentScan

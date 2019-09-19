@@ -1,3 +1,10 @@
+HELP.md
+target/
+.mvn
+mvnw*
+!**/src/main/**
+!**/src/test/**
+
 # Compiled class file
 *.class
 

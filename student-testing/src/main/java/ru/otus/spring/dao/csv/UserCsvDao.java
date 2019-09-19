@@ -1,6 +1,5 @@
 package ru.otus.spring.dao.csv;
 
-import jdk.nashorn.internal.ir.IfNode;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.dao.Dao;
 import ru.otus.spring.entity.User;
