@@ -3,6 +3,7 @@ package ru.otus.spring.studenttestingsboot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.studenttestingsboot.annotation.UpdateCache;
 import ru.otus.spring.studenttestingsboot.dao.Dao;
 import ru.otus.spring.studenttestingsboot.dto.AnswerDto;
 import ru.otus.spring.studenttestingsboot.dto.ResultDto;
@@ -73,11 +74,16 @@ public class TestingServiceImpl implements TestingService {
         }
     }
 
-    private void checkAnswer(AnswerDto answerDto) {
-        Answer correctAnswer = correctAnswerCache.get(answerDto.getQuestionId());
-        answerDto.setUserAnswerCorrect(Character.toUpperCase(answerDto.getUserAnswer()) == correctAnswer.getLetter());
-        answerDto.setCorrectAnswer(correctAnswer);
+    @UpdateCache
+    private void updateCache() {
+        fillCorrectAnswerCache(questionDao.updateCache());
     }
 
-
+    private void checkAnswer(AnswerDto answerDto) {
+        Answer correctAnswer = correctAnswerCache.get(answerDto.getQuestionId());
+        if (correctAnswer != null) {
+            answerDto.setUserAnswerCorrect(Character.toUpperCase(answerDto.getUserAnswer()) == correctAnswer.getLetter());
+            answerDto.setCorrectAnswer(correctAnswer);
+        }
+    }
 }

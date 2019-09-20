@@ -78,7 +78,7 @@ class QuestionCsvDaoTest {
         Locale defaultLocale = i18nService.getCurrentLocale();
         i18nService.setCurrentLocale(new Locale("ru"));
         QuestionCsvDao questionCsvDao = context.getBean(QuestionCsvDao.class);
-        questionCsvDao.readFromFile();
+        questionCsvDao.updateCache();
 
 //        Act
         Question question = questionCsvDao.getById(1);
@@ -93,7 +93,7 @@ class QuestionCsvDaoTest {
 
 
     @SpringBootConfiguration
-    public static class QuestionCsvDaoTestConfig {
+    static class QuestionCsvDaoTestConfig {
 
         @Bean
         @Scope("prototype")
