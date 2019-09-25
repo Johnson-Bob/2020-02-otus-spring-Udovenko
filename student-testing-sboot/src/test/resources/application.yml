@@ -1,2 +1,7 @@
 pass:
   test: 60
+
+spring:
+  shell:
+    interactive:
+      enabled: false

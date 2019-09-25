@@ -19,8 +19,7 @@ import ru.otus.spring.studenttestingsboot.entity.Question;
 import ru.otus.spring.studenttestingsboot.service.TestingService;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(properties = {InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + " = false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + " = false"})
+@SpringBootTest
 @DisplayName("Class UpdateCacheService")
 class UpdateCacheServiceTest {
     @Autowired private TestingService testingService;
