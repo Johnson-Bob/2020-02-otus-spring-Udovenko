@@ -13,5 +13,6 @@
     <modules>
         <module>student-testing</module>
         <module>student-testing-sboot</module>
+	    <module>book-library</module>
     </modules>
 </project>
