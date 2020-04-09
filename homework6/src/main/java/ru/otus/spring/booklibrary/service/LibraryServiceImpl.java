@@ -2,54 +2,71 @@ package ru.otus.spring.booklibrary.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.booklibrary.dao.AuthorDao;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.booklibrary.dao.BookDao;
 import ru.otus.spring.booklibrary.dao.GenreDao;
 import ru.otus.spring.booklibrary.model.dto.BookDto;
-import ru.otus.spring.booklibrary.model.entity.Author;
+import ru.otus.spring.booklibrary.model.dto.GenreDto;
 import ru.otus.spring.booklibrary.model.entity.Book;
-import ru.otus.spring.booklibrary.model.entity.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LibraryServiceImpl implements LibraryService {
 
     private final BookDao bookDao;
-    private final AuthorDao authorDao;
+    private final AuthorService authorService;
     private final GenreDao genreDao;
 
     @Override
-    public Book addBookToLibrary(BookDto bookDto) {
-        Book book = new Book(0, bookDto.getBookName(), bookDto.getGenre(), bookDto.getAuthors());;
-        long bookId = bookDao.create(book);
-        book.setId(bookId);
-        return book;
+    @Transactional
+    public BookDto addBookToLibrary(BookDto bookDto) {
+        Book newBook = new Book(null, bookDto.getBookName(), bookDto.getGenre(), bookDto.getAuthors());
+        return convertToDto(bookDao.save(newBook));
     }
 
     @Override
-    public boolean deleteBookFromLibrary(Book book) {
-        return bookDao.delete(book.getId()) > 0;
+    @Transactional
+    public void deleteBookFromLibrary(BookDto bookDto) {
+        bookDao.deleteById(bookDto.getId());
     }
 
     @Override
-    public List<Book> getAllBooksFromLibrary() {
-        return bookDao.getAll();
+    @Transactional(readOnly = true)
+    public List<BookDto> getAllBooksFromLibrary() {
+        return convertToListDto(bookDao.getAll());
     }
 
     @Override
-    public List<Book> findBookByName(String name) {
-        return bookDao.getByName(name);
+    @Transactional(readOnly = true)
+    public List<BookDto> findBookByName(String name) {
+        return convertToListDto(bookDao.getByName(name));
     }
 
     @Override
-    public List<Genre> getAllGenres() {
-        return genreDao.getAllGenres();
+    @Transactional(readOnly = true)
+    public List<GenreDto> getAllGenres() {
+        return genreDao.getAllGenres().stream()
+                .map(g -> GenreDto.builder().id(g.getId()).genreName(g.getGenreName()).build())
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Author> getAllAuthors() {
-        return authorDao.getAllAuthors();
+    private BookDto convertToDto(Book book) {
+        return BookDto.builder()
+                .id(book.getId())
+                .bookName(book.getName())
+                .genreDto(GenreDto.builder().id(book.getGenre().getId()).genreName(book.getGenre().getGenreName()).build())
+                .authors(authorService.convertToSetDto(book.getAuthors()))
+                .build();
+    }
+
+    private List<BookDto> convertToListDto(List<Book> books) {
+        List<BookDto> result = new ArrayList<>(books.size());
+        books.forEach(book -> result.add(convertToDto(book)));
+
+        return result;
     }
 }

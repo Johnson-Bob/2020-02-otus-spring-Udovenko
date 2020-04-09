@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface BookDao {
     List<Book> getAll();
-    Book getById(long id);
+    Book getById(Long id);
     List<Book> getByName(String name);
-    long create(Book book);
-    int delete(long id);
+    Book save(Book book);
+    void deleteById(Long id);
 }

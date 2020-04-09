@@ -13,3 +13,7 @@ VALUES (1, 'My first book'), (2, 'My second book');
 --Insert book_author
 INSERT INTO book_author(book_id, author_id)
 VALUES (1, 1), (1, 2), (2, 3);
+
+--Insert comments
+INSERT INTO comment (book_id, text)
+VALUES (1, 'comment1'), (1, 'comment2');
