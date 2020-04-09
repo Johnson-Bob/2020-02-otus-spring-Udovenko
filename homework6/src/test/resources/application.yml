@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:book_library_test
+    data: test_data.sql
+    initialization-mode: always
+shell:
+  interactive:
+    enabled: false
+
