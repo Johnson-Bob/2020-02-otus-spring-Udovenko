@@ -1,7 +1,8 @@
-package ru.otus.spring.booklibrary.dao.jpa;
+package ru.otus.spring.booklibrary.dao;
 
 import org.assertj.core.groups.Tuple;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +10,6 @@ import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.booklibrary.model.entity.Author;
 import ru.otus.spring.booklibrary.model.entity.Book;
@@ -25,10 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("DAO for work with book")
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Import(BookDaoJpa.class)
 class BookDaoJpaTest {
     @Autowired
-    private BookDaoJpa bookDao;
+    private BookDao bookDao;
 
     @Autowired
     private TestEntityManager em;
@@ -36,18 +35,25 @@ class BookDaoJpaTest {
     @Test
     @DisplayName("should return all books")
     void shouldGetAll() {
-        List<Book> booksFromDatabase = bookDao.getAll();
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().clear();
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+
+        Iterable<Book> booksFromDatabase = bookDao.findAll();
 
         assertThat(booksFromDatabase).isNotNull().isNotEmpty().hasSize(2)
                 .allMatch(b -> StringUtils.isNotBlank(b.getName()))
                 .allMatch(b -> b.getGenre() != null)
                 .allMatch(b -> !b.getAuthors().isEmpty());
+
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(2);
     }
 
     @Test
     @DisplayName("should return correct book by id")
     void shouldGetCorrectBookById() {
-        Book bookFromDatabase = bookDao.getById(1L).orElseThrow();
+        Book bookFromDatabase = bookDao.findById(1L).orElseThrow();
         Book existingBook = em.find(Book.class, 1L);
 
         assertTwoBooks(bookFromDatabase, existingBook);
@@ -56,14 +62,21 @@ class BookDaoJpaTest {
     @Test
     @DisplayName("should return correct book by book's name")
     void shouldGetBookByName() {
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().clear();
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+
         Book existingBook = em.find(Book.class, 1L);
 
-        List<Book> booksFromDatabase = bookDao.getByName(existingBook.getName());
+        List<Book> booksFromDatabase = bookDao.findByName(existingBook.getName());
 
         assertThat(booksFromDatabase).isNotNull().isNotEmpty().hasSize(1);
         Book bookFromDb = booksFromDatabase.get(0);
         assertThat(bookFromDb.getId()).isEqualTo(existingBook.getId());
         assertTwoBooks(bookFromDb, existingBook);
+
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(3);
     }
 
     @Test
@@ -71,7 +84,7 @@ class BookDaoJpaTest {
     void shouldReturnEmptyList() {
         String bookName = "abracatabra";
 
-        List<Book> foundBooks = bookDao.getByName(bookName);
+        List<Book> foundBooks = bookDao.findByName(bookName);
 
         assertThat(foundBooks).isNotNull().isEmpty();
     }

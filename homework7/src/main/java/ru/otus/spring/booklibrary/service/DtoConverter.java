@@ -8,11 +8,10 @@ import ru.otus.spring.booklibrary.model.entity.Author;
 import ru.otus.spring.booklibrary.model.entity.Book;
 import ru.otus.spring.booklibrary.model.entity.Comment;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class DtoConverter {
     public static BookDto convertToBookDto(Book book) {
@@ -24,11 +23,10 @@ public class DtoConverter {
                 .build();
     }
 
-    public static List<BookDto> convertToListBookDto(List<Book> books) {
-        List<BookDto> result = new ArrayList<>(books.size());
-        books.forEach(book -> result.add(convertToBookDto(book)));
-
-        return result;
+    public static List<BookDto> convertToListBookDto(Iterable<Book> books) {
+        return StreamSupport.stream(books.spliterator(), false)
+                .map(DtoConverter::convertToBookDto)
+                .collect(Collectors.toList());
     }
 
     public static AuthorDto convertToAuthorDto(Author author) {
@@ -39,8 +37,8 @@ public class DtoConverter {
                 .build();
     }
 
-    public static Set<AuthorDto> convertToSetAuthorDto(Collection<Author> authors) {
-        return authors.stream()
+    public static Set<AuthorDto> convertToSetAuthorDto(Iterable<Author> authors) {
+        return StreamSupport.stream(authors.spliterator(), false)
                 .map(DtoConverter::convertToAuthorDto)
                 .collect(Collectors.toSet());
     }

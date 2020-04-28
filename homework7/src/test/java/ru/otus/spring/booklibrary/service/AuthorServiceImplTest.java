@@ -32,7 +32,7 @@ class AuthorServiceImplTest {
     @DisplayName("should don't save new author if found in database")
     void shouldNotSave() {
         Author mockAuthor = new Author(1L, testDto.getFirstName(), testDto.getLastName());
-        Mockito.when(dao.findByFirstAndLastNames(anyString(), anyString())).thenReturn(Optional.of(mockAuthor));
+        Mockito.when(dao.findByFirstNameAndLastName(anyString(), anyString())).thenReturn(Optional.of(mockAuthor));
 
         service.findOrSaveAuthor(testDto);
         Mockito.verify(dao, Mockito.never()).save(any());
@@ -42,7 +42,7 @@ class AuthorServiceImplTest {
     @DisplayName("should save new author if didn't find in database")
     void shouldSave() {
         Author mockAuthor = new Author(1L, testDto.getFirstName(), testDto.getLastName());
-        Mockito.when(dao.findByFirstAndLastNames(anyString(), anyString())).thenReturn(Optional.empty());
+        Mockito.when(dao.findByFirstNameAndLastName(anyString(), anyString())).thenReturn(Optional.empty());
         Mockito.when(dao.save(any())).thenReturn(mockAuthor);
 
         service.findOrSaveAuthor(testDto);

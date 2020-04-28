@@ -1,9 +1,8 @@
 package ru.otus.spring.booklibrary.dao;
 
+import org.springframework.data.repository.CrudRepository;
 import ru.otus.spring.booklibrary.model.entity.Genre;
 
-import java.util.List;
+public interface GenreDao extends CrudRepository<Genre, Long> {
 
-public interface GenreDao {
-    List<Genre> getAllGenres();
 }

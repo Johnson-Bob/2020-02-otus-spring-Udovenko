@@ -1,4 +1,4 @@
-package ru.otus.spring.booklibrary.dao.jpa;
+package ru.otus.spring.booklibrary.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,21 +7,17 @@ import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.booklibrary.model.entity.Author;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO for work with author")
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Import(AuthorDaoJpa.class)
 class AuthorDaoJpaTest {
     @Autowired
-    private AuthorDaoJpa authorDao;
+    private AuthorDao authorDao;
 
     @Autowired
     private TestEntityManager em;
@@ -29,7 +25,7 @@ class AuthorDaoJpaTest {
     @Test
     @DisplayName("Should return list of all authors")
     void shouldReturnListOfAuthors() {
-        List<Author> authors = authorDao.getAllAuthors();
+        Iterable<Author> authors = authorDao.findAll();
 
         assertThat(authors).isNotNull().isNotEmpty().hasSize(4)
                 .allMatch(a -> a.getId() != 0)
@@ -42,7 +38,7 @@ class AuthorDaoJpaTest {
     void shouldGetAuthorByFirstAndLastNames() {
         Author existingAuthor = em.find(Author.class, 1L);
 
-        Author authFromDb = authorDao.findByFirstAndLastNames(existingAuthor.getFirstName(), existingAuthor.getLastName()).get();
+        Author authFromDb = authorDao.findByFirstNameAndLastName(existingAuthor.getFirstName(), existingAuthor.getLastName()).get();
 
         assertThat(authFromDb).isNotNull();
         assertThat(authFromDb).isEqualTo(existingAuthor);

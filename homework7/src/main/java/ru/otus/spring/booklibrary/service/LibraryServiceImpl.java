@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static ru.otus.spring.booklibrary.service.DtoConverter.convertToListBookDto;
 
@@ -23,7 +24,6 @@ import static ru.otus.spring.booklibrary.service.DtoConverter.convertToListBookD
 public class LibraryServiceImpl implements LibraryService {
 
     private final BookDao bookDao;
-    private final AuthorService authorService;
     private final GenreDao genreDao;
 
     @Override
@@ -42,19 +42,19 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooksFromLibrary() {
-        return convertToListBookDto(bookDao.getAll());
+        return convertToListBookDto(bookDao.findAll());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> findBookByName(String name) {
-        return convertToListBookDto(bookDao.getByName(name));
+        return convertToListBookDto(bookDao.findByName(name));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<GenreDto> getAllGenres() {
-        return genreDao.getAllGenres().stream()
+        return StreamSupport.stream(genreDao.findAll().spliterator(), false)
                 .map(g -> GenreDto.builder().id(g.getId()).genreName(g.getGenreName()).build())
                 .collect(Collectors.toList());
     }
@@ -62,7 +62,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public Map<Long, CommentDto> getAllBookComments(BookDto bookDto) {
-        return bookDao.getById(bookDto.getId())
+        return bookDao.findById(bookDto.getId())
                 .map(Book::getComments)
                 .orElse(Collections.emptyList())
                 .stream()

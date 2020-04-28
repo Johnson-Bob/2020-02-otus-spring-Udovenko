@@ -1,10 +1,8 @@
 package ru.otus.spring.booklibrary.dao;
 
+import org.springframework.data.repository.CrudRepository;
 import ru.otus.spring.booklibrary.model.entity.Comment;
 
-import java.util.List;
+public interface CommentDao extends CrudRepository<Comment, Long> {
 
-public interface CommentDao {
-    Comment createComment(Comment comment);
-    void deleteCommentById(Long id);
 }

@@ -1,4 +1,4 @@
-package ru.otus.spring.booklibrary.dao.jpa;
+package ru.otus.spring.booklibrary.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -6,23 +6,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.booklibrary.model.entity.Book;
 import ru.otus.spring.booklibrary.model.entity.Comment;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO for work with comment")
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Import(CommentDaoJpa.class)
 class CommentDaoJpaTest {
 
     @Autowired
-    private CommentDaoJpa dao;
+    private CommentDao dao;
 
     @Autowired
     private TestEntityManager em;
@@ -35,7 +31,7 @@ class CommentDaoJpaTest {
         book.setId(2L);
         Comment comment = new Comment(null, book, testComment);
 
-        Comment afterSave = dao.createComment(comment);
+        Comment afterSave = dao.save(comment);
 
         assertThat(afterSave)
                 .isNotNull()
@@ -50,7 +46,7 @@ class CommentDaoJpaTest {
         /*Book commentedBook = em.find(Book.class, existingComment.getBook().getId());
         int commentsCount = commentedBook.getComments().size();*/
 
-        dao.deleteCommentById(existingComment.getId());
+        dao.deleteById(existingComment.getId());
 
         Comment deletedComment = em.find(Comment.class, existingComment.getId());
         assertThat(deletedComment).isNull();
