@@ -32,4 +32,4 @@ CREATE TABLE IF NOT EXISTS comment (
     book_id INT8 NOT NULL,
     text VARCHAR(250) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (book_id) REFERENCES book(id));
+    FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE);
