@@ -10,9 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BookDaoJpa implements BookDao {
+
     @PersistenceContext
     private EntityManager em;
 
@@ -27,16 +29,11 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     @Transactional(readOnly = true)
-    public Book getById(Long id) {
-       EntityGraph<?> entityGraph = em.getEntityGraph("bookGenre");
-       TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.id = :id", Book.class);
-       query.setParameter("id", id);
-       query.setHint("javax.persistence.fetchgraph", entityGraph);
-       return query.getSingleResult();
+    public Optional<Book> getById(Long id) {
+       return Optional.ofNullable(em.find(Book.class, id));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> getByName(String name) {
         EntityGraph<?> entityGraph = em.getEntityGraph("bookGenre");
         TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b WHERE b.name = :name", Book.class);
@@ -46,7 +43,6 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public Book save(Book book) {
         if (book.getId() == null) {
             em.persist(book);
@@ -57,12 +53,10 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         Book book = em.getReference(Book.class, id);
         if (book != null) {
             em.remove(book);
-            em.flush();
         }
     }
 }

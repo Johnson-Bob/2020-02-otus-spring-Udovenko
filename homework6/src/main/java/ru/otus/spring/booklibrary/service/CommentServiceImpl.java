@@ -21,7 +21,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public Map<Long, CommentDto> getAllBookComments(BookDto bookDto) {
-        return commentDao.findByBook_Id(bookDto.getId()).stream()
+        return commentDao.findByBookId(bookDto.getId()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toMap(CommentDto::getId, Function.identity()));
     }

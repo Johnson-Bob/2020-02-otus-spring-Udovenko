@@ -31,7 +31,7 @@ class CommentDaoJpaTest {
     @DisplayName("should return correct book comment list")
     void shouldReturnCommentList() {
         Book bookFromDb = em.find(Book.class, 1L);
-        List<Comment> comments = dao.findByBook_Id(bookFromDb.getId());
+        List<Comment> comments = dao.findByBookId(bookFromDb.getId());
 
         assertThat(comments).isNotNull().hasSize(2);
         assertThat(comments).extracting(Comment::getBook)

@@ -46,7 +46,7 @@ class BookDaoJpaTest {
     @Test
     @DisplayName("should return correct book by id")
     void shouldGetCorrectBookById() {
-        Book bookFromDatabase = bookDao.getById(1L);
+        Book bookFromDatabase = bookDao.getById(1L).orElseThrow();
         Book existingBook = em.find(Book.class, 1L);
 
         assertTwoBooks(bookFromDatabase, existingBook);

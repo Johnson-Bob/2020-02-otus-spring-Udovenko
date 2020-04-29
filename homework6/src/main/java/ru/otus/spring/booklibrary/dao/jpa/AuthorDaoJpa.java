@@ -3,7 +3,6 @@ package ru.otus.spring.booklibrary.dao.jpa;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.booklibrary.dao.AuthorDao;
 import ru.otus.spring.booklibrary.model.entity.Author;
 
@@ -22,13 +21,11 @@ public class AuthorDaoJpa implements AuthorDao {
     private EntityManager em;
 
     @Override
-    @Transactional(readOnly = true)
     public List<Author> getAllAuthors() {
         return em.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Author> findByFirstAndLastNames(String firstName, String lastName) {
         TypedQuery<Author> query = em.createQuery("SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName", Author.class);
         query.setParameter("firstName", firstName);
@@ -37,7 +34,6 @@ public class AuthorDaoJpa implements AuthorDao {
     }
 
     @Override
-    @Transactional
     public Author save(Author author) {
         if (author.getId() == null) {
             em.persist(author);
