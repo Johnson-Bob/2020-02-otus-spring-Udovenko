@@ -1,33 +1,29 @@
 package ru.otus.spring.booklibrary.model.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "author")
+@Document(collection = "authors")
 public class Author {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "first_name", nullable = false)
+    @MongoId(targetType = FieldType.OBJECT_ID)
+    private String id;
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @PersistenceConstructor
+    public Author(String id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

@@ -11,15 +11,15 @@ import java.util.regex.Pattern;
 public class ConsoleProcessor {
     private final Scanner scanner = new Scanner(System.in);
 
-    public <T> T waitAndCheckAnswer(Map<Long, T> answerVariants, String answer) {
+    public <T> T waitAndCheckAnswer(Map<String, T> answerVariants, String invite) {
         displayMapOnScreen(answerVariants);
-        Long result;
+        String userChoice;
         do {
-            Long selectedNumb = Long.parseLong(waitAnswer(answer, Pattern.compile("^\\d+")));
-            result = answerVariants.containsKey(selectedNumb) ? selectedNumb : null;
-        } while (result == null);
+            String selectedNumb = waitAnswer(invite, Pattern.compile("^\\d+"));
+            userChoice = answerVariants.containsKey(selectedNumb) ? selectedNumb : null;
+        } while (userChoice == null);
 
-        return answerVariants.get(result);
+        return answerVariants.get(userChoice);
     }
 
     public String waitAnswer(String invite) {

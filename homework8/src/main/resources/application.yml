@@ -1,14 +1,7 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:book_library
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-    initialization-mode: always
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: false
-    show-sql: false
-    hibernate:
-      ddl-auto: none
+  data:
+    mongodb:
+      database: book-library
+      host: 127.0.0.1
+      port: 27017
 

@@ -7,11 +7,9 @@ import ru.otus.spring.booklibrary.model.dto.GenreDto;
 import ru.otus.spring.booklibrary.service.LibraryService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
+import static ru.otus.spring.booklibrary.service.DtoConverter.convertListToMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,12 +20,12 @@ public class BookController {
 
     public void addBookToLibrary() {
         BookDto.BookDtoBuilder bookDtoBuilder = BookDto.builder();
-        bookDtoBuilder.bookName(consoleProcessor.waitAnswer("Enter book's name please"));
-        bookDtoBuilder.genreDto(selectGenre());
+        bookDtoBuilder.bookTitle(consoleProcessor.waitAnswer("Enter book's name please"));
+        bookDtoBuilder.genre(selectGenre().getGenreName());
         bookDtoBuilder.authors(authorController.inputAuthors());
 
         BookDto book = libraryService.addBookToLibrary(bookDtoBuilder.build());
-        System.out.println(String.format("Congratulate, your book was added to database with id = %d", book.getId()));
+        System.out.println("Congratulate, your book was added to database");
     }
 
     public void deleteBookFromLibrary() {
@@ -40,8 +38,8 @@ public class BookController {
     }
 
     private BookDto selectBook(List<BookDto> foundBooks) {
-        Map<Long, BookDto> booksMap = foundBooks.stream().collect(toMap(BookDto::getId, identity()));
-        return consoleProcessor.waitAndCheckAnswer(booksMap, "Please, choose book number for deleting");
+        return consoleProcessor.waitAndCheckAnswer(convertListToMap(foundBooks),
+                "Please, choose book number for deleting");
     }
 
     public void findBookByName() {
@@ -80,7 +78,7 @@ public class BookController {
     }
 
     private GenreDto selectGenre() {
-        Map<Long, GenreDto> genreMap = libraryService.getAllGenres().stream().collect(toMap(GenreDto::getId, identity()));
-        return consoleProcessor.waitAndCheckAnswer(genreMap, "Please, choose genre number");
+        List<GenreDto> genres = libraryService.getAllGenres();
+        return consoleProcessor.waitAndCheckAnswer(convertListToMap(genres), "Please, choose genre number");
     }
 }

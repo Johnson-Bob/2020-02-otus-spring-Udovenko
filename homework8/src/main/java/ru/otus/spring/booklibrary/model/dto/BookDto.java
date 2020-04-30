@@ -2,27 +2,18 @@ package ru.otus.spring.booklibrary.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import ru.otus.spring.booklibrary.model.entity.Author;
-import ru.otus.spring.booklibrary.model.entity.Genre;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
 @Builder
 public class BookDto {
-    private Long id;
-    private String bookName;
-    private GenreDto genreDto;
+    private String id;
+    private String bookTitle;
+    private String genre;
     private Set<AuthorDto> authors;
-
-    @Override
-    public String toString() {
-        return "\"" + bookName + "\" " + genreDto.toString() + " "
-                + authors.stream().map(AuthorDto::shortString).collect(Collectors.joining(", "));
-    }
 
     public Set<Author> getAuthors() {
         return authors.stream()
@@ -30,7 +21,9 @@ public class BookDto {
                 .collect(Collectors.toSet());
     }
 
-    public Genre getGenre() {
-        return new Genre(genreDto.getId(), genreDto.getGenreName());
+    @Override
+    public String toString() {
+        return "\"" + bookTitle + "\" " + genre + " "
+                + authors.stream().map(AuthorDto::shortString).collect(Collectors.joining(", "));
     }
 }

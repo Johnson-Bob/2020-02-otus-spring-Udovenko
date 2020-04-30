@@ -1,16 +1,13 @@
 package ru.otus.spring.booklibrary.model.dto;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
-@Builder
+@RequiredArgsConstructor
 public class GenreDto {
-    private Long id;
 
-    private String genreName;
+    private final String genreName;
 
     @Override
     public String toString() {

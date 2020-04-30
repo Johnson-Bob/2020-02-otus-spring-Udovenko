@@ -1,8 +1,8 @@
 package ru.otus.spring.booklibrary.dao;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.spring.booklibrary.model.entity.Genre;
 
-public interface GenreDao extends CrudRepository<Genre, Long> {
+public interface GenreDao extends MongoRepository<Genre, String> {
 
 }

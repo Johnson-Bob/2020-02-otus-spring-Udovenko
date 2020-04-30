@@ -1,59 +1,51 @@
 package ru.otus.spring.booklibrary.model.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "book")
-@NamedEntityGraph(name = "bookGenre", attributeNodes = {@NamedAttributeNode("genre")})
+@Document(collection = "books")
 public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @MongoId(targetType = FieldType.OBJECT_ID)
+    private String id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    private String title;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "genre_id")
-    private Genre genre;
+    private String genre;
 
-    @Fetch(FetchMode.SUBSELECT)
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE},
-            targetEntity = Author.class)
-    @JoinTable(name = "book_author",
-        joinColumns = @JoinColumn(name = "book_id"),
-        inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors = new HashSet<>();
+    @Field(targetType = FieldType.ARRAY)
+    private Set<Author> authors;
 
-    @OneToMany(mappedBy = "book", cascade = {CascadeType.ALL})
-    private List<Comment> comments = new ArrayList<>();
+    @Field(targetType = FieldType.ARRAY)
+    private Set<Comment> comments;
+
+    @PersistenceConstructor
+    public Book(String id, String title, String genre, Set<Author> authors) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.authors = authors;
+    }
+
+    public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new LinkedHashSet<>();
+        }
+        comments.add(comment);
+    }
+
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
+    }
 }

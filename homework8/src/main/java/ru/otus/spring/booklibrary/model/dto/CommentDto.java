@@ -2,15 +2,15 @@ package ru.otus.spring.booklibrary.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Builder
 public class CommentDto {
-    private Long id;
-    private BookDto bookDto;
     private String text;
+    private BookDto bookDto;
+    private LocalDateTime create;
 
     @Override
     public String toString() {

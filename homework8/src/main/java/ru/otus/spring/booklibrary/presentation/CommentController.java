@@ -5,9 +5,9 @@ import org.springframework.stereotype.Controller;
 import ru.otus.spring.booklibrary.model.dto.BookDto;
 import ru.otus.spring.booklibrary.model.dto.CommentDto;
 import ru.otus.spring.booklibrary.service.CommentService;
-import ru.otus.spring.booklibrary.service.LibraryService;
+import ru.otus.spring.booklibrary.service.DtoConverter;
 
-import java.util.Map;
+import java.util.List;
 import java.util.function.Consumer;
 
 @Controller
@@ -16,15 +16,14 @@ public class CommentController {
     private final BookController bookController;
     private final ConsoleProcessor consoleProcessor;
     private final CommentService commentService;
-    private final LibraryService libraryService;
 
     public void outputAllBookComments() {
         handleCommentsByBook(bookDto -> {
-            Map<Long, CommentDto> comments = libraryService.getAllBookComments(bookDto);
-            String noComments = "This book don't have any comments yet";
+            List<CommentDto> comments = commentService.getAllBookComments(bookDto);
             if (!comments.isEmpty()) {
-                consoleProcessor.displayMapOnScreen(comments);
+                consoleProcessor.displayMapOnScreen(DtoConverter.convertListToMap(comments));
             } else {
+                String noComments = "This book don't have any comments yet";
                 consoleProcessor.outputString(noComments);
             }
         });
@@ -41,8 +40,9 @@ public class CommentController {
 
     public void deleteBookComment() {
         handleCommentsByBook(bookDto -> {
-            Map<Long, CommentDto> comments = libraryService.getAllBookComments(bookDto);
-            CommentDto selectedComment = consoleProcessor.waitAndCheckAnswer(comments, "Please, select comment for deleting");
+            List<CommentDto> comments = commentService.getAllBookComments(bookDto);
+            CommentDto selectedComment = consoleProcessor.waitAndCheckAnswer(DtoConverter.convertListToMap(comments),
+                    "Please, select comment for deleting");
             commentService.deleteComment(selectedComment);
             consoleProcessor.outputString("Congratulate, your comment has been deleted");
         });
