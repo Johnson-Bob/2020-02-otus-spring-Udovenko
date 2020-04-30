@@ -6,12 +6,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.booklibrary.dao.BookDao;
 import ru.otus.spring.booklibrary.dao.GenreDao;
 import ru.otus.spring.booklibrary.model.dto.BookDto;
+import ru.otus.spring.booklibrary.model.dto.CommentDto;
 import ru.otus.spring.booklibrary.model.dto.GenreDto;
 import ru.otus.spring.booklibrary.model.entity.Book;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static ru.otus.spring.booklibrary.service.DtoConverter.convertToListBookDto;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +29,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional
     public BookDto addBookToLibrary(BookDto bookDto) {
-        Book newBook = new Book(null, bookDto.getBookName(), bookDto.getGenre(), bookDto.getAuthors());
-        return convertToDto(bookDao.save(newBook));
+        Book newBook = new Book(null, bookDto.getBookName(), bookDto.getGenre(), bookDto.getAuthors(), Collections.emptyList());
+        return DtoConverter.convertToBookDto(bookDao.save(newBook));
     }
 
     @Override
@@ -37,13 +42,13 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooksFromLibrary() {
-        return convertToListDto(bookDao.getAll());
+        return convertToListBookDto(bookDao.getAll());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> findBookByName(String name) {
-        return convertToListDto(bookDao.getByName(name));
+        return convertToListBookDto(bookDao.getByName(name));
     }
 
     @Override
@@ -54,19 +59,14 @@ public class LibraryServiceImpl implements LibraryService {
                 .collect(Collectors.toList());
     }
 
-    private BookDto convertToDto(Book book) {
-        return BookDto.builder()
-                .id(book.getId())
-                .bookName(book.getName())
-                .genreDto(GenreDto.builder().id(book.getGenre().getId()).genreName(book.getGenre().getGenreName()).build())
-                .authors(authorService.convertToSetDto(book.getAuthors()))
-                .build();
-    }
-
-    private List<BookDto> convertToListDto(List<Book> books) {
-        List<BookDto> result = new ArrayList<>(books.size());
-        books.forEach(book -> result.add(convertToDto(book)));
-
-        return result;
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, CommentDto> getAllBookComments(BookDto bookDto) {
+        return bookDao.getById(bookDto.getId())
+                .map(Book::getComments)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(DtoConverter::convertToCommentDto)
+                .collect(Collectors.toMap(CommentDto::getId, Function.identity()));
     }
 }

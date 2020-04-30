@@ -16,14 +16,6 @@ public class CommentDaoJpa implements CommentDao {
     private EntityManager em;
 
     @Override
-    public List<Comment> findByBookId(Long bookId) {
-        TypedQuery<Comment> query = em.createQuery("SELECT c FROM Comment c INNER JOIN c.book b WHERE b.id = :bookId",
-                Comment.class);
-        query.setParameter("bookId", bookId);
-        return query.getResultList();
-    }
-
-    @Override
     public Comment createComment(Comment comment) {
         if (comment.getId() == null) {
             em.persist(comment);

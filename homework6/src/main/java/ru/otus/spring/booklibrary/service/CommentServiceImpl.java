@@ -13,18 +13,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static ru.otus.spring.booklibrary.service.DtoConverter.convertToComment;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentDao commentDao;
-
-    @Override
-    @Transactional(readOnly = true)
-    public Map<Long, CommentDto> getAllBookComments(BookDto bookDto) {
-        return commentDao.findByBookId(bookDto.getId()).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toMap(CommentDto::getId, Function.identity()));
-    }
 
     @Override
     @Transactional
@@ -36,19 +30,5 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteComment(CommentDto dto) {
         commentDao.deleteCommentById(dto.getId());
-    }
-
-    private CommentDto convertToDto(Comment comment) {
-        return CommentDto.builder()
-                .id(comment.getId())
-                .bookDto(BookDto.builder().id(comment.getBook().getId()).bookName(comment.getBook().getName()).build())
-                .text(comment.getText())
-                .build();
-    }
-
-    private Comment convertToComment(CommentDto commentDto) {
-        BookDto bookDto = commentDto.getBookDto();
-        Book book = new Book(bookDto.getId(), bookDto.getBookName(), bookDto.getGenre(), bookDto.getAuthors());
-        return new Comment(commentDto.getId(), book, commentDto.getText());
     }
 }

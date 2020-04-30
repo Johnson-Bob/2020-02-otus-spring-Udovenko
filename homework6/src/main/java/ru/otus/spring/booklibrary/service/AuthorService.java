@@ -9,5 +9,4 @@ import java.util.Set;
 public interface AuthorService {
     AuthorDto findOrSaveAuthor(AuthorDto dto);
     Set<AuthorDto> getAllAuthors();
-    Set<AuthorDto> convertToSetDto(Collection<Author> authors);
 }

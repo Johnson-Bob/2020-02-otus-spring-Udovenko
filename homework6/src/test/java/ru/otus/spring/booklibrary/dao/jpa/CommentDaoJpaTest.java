@@ -28,22 +28,12 @@ class CommentDaoJpaTest {
     private TestEntityManager em;
 
     @Test
-    @DisplayName("should return correct book comment list")
-    void shouldReturnCommentList() {
-        Book bookFromDb = em.find(Book.class, 1L);
-        List<Comment> comments = dao.findByBookId(bookFromDb.getId());
-
-        assertThat(comments).isNotNull().hasSize(2);
-        assertThat(comments).extracting(Comment::getBook)
-                .allMatch(b -> b.getId() == bookFromDb.getId())
-                .allMatch(b -> b.getName().equals(bookFromDb.getName()));
-    }
-
-    @Test
     @DisplayName("should save new comment")
     void shouldSaveComment() {
         String testComment = "Test comment";
-        Comment comment = new Comment(null, new Book(2l, null, null, null), testComment);
+        Book book = new Book();
+        book.setId(2L);
+        Comment comment = new Comment(null, book, testComment);
 
         Comment afterSave = dao.createComment(comment);
 
@@ -57,6 +47,8 @@ class CommentDaoJpaTest {
     @DisplayName("should delete a comment and don't delete a book")
     void shouldDeleteComment() {
         Comment existingComment = em.find(Comment.class, 1L);
+        /*Book commentedBook = em.find(Book.class, existingComment.getBook().getId());
+        int commentsCount = commentedBook.getComments().size();*/
 
         dao.deleteCommentById(existingComment.getId());
 

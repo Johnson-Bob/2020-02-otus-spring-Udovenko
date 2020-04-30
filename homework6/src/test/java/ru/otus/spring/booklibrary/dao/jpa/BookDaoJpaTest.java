@@ -15,6 +15,7 @@ import ru.otus.spring.booklibrary.model.entity.Author;
 import ru.otus.spring.booklibrary.model.entity.Book;
 import ru.otus.spring.booklibrary.model.entity.Genre;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -105,7 +106,7 @@ class BookDaoJpaTest {
         Genre genre = em.find(Genre.class, 1L);
         Author author1 = em.find(Author.class, 1L);
         Author author2 = em.find(Author.class, 3L);
-        return new Book(null, "My new book", genre, Set.of(author1, author2));
+        return new Book(null, "My new book", genre, Set.of(author1, author2), Collections.emptyList());
     }
 
     private void assertTwoBooks(Book testBook, Book exampleBook) {
