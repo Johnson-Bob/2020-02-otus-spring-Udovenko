@@ -22,32 +22,27 @@ public class LibraryServiceImpl implements LibraryService {
     private final GenreDao genreDao;
 
     @Override
-    @Transactional
     public BookDto addBookToLibrary(BookDto bookDto) {
         Book newBook = new Book(null, bookDto.getBookTitle(), bookDto.getGenre(), bookDto.getAuthors());
         return DtoConverter.convertToBookDto(bookDao.save(newBook));
     }
 
     @Override
-    @Transactional
     public void deleteBookFromLibrary(BookDto bookDto) {
         bookDao.deleteById(bookDto.getId());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookDto> getAllBooksFromLibrary() {
         return convertToListBookDto(bookDao.findAll());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookDto> findBookByName(String name) {
         return convertToListBookDto(bookDao.findByTitle(name));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<GenreDto> getAllGenres() {
         return genreDao.findAll().stream()
                 .map(g -> new GenreDto(g.getGenreName()))

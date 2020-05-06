@@ -20,7 +20,6 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorDao authorDao;
 
     @Override
-    @Transactional
     public AuthorDto findOrSaveAuthor(AuthorDto dto) {
         Optional<Author> optionalAuthor = authorDao.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
         Author author = optionalAuthor.orElseGet(() -> authorDao.save(convertToAuthor(dto)));
@@ -29,7 +28,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional
     public Set<AuthorDto> getAllAuthors() {
         return convertToSetAuthorDto(authorDao.findAll());
     }
