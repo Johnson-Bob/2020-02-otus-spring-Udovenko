@@ -6,9 +6,11 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import org.springframework.context.annotation.Profile;
 
 
 @ChangeLog
+@Profile("dev")
 public class DatabaseChangelog {
 
     @ChangeSet(order = "001", id = "addGenres", author = "vudovenko")
