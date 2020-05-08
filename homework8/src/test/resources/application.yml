@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      database: book-library
+
+shell:
+  interactive:
+    enabled: false
+
