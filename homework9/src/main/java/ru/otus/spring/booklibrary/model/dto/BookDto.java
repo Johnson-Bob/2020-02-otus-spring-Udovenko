@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class BookDto {
-    private String id;
-    private String bookTitle;
-    private String genre;
-    private Set<AuthorDto> authors;
+    private final String id;
+    private final String bookTitle;
+    private final String genre;
+    private final Set<AuthorDto> authors;
 
     public Set<Author> getAuthors() {
         return authors.stream()

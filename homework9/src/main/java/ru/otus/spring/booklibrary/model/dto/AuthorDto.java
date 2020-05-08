@@ -8,9 +8,9 @@ import lombok.Getter;
 @Builder
 @EqualsAndHashCode
 public class AuthorDto {
-    private String id;
-    private String firstName;
-    private String lastName;
+    private final String id;
+    private final String firstName;
+    private final String lastName;
 
     @Override
     public String toString() {

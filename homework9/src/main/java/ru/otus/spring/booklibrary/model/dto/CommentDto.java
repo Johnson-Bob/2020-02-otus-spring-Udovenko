@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class CommentDto {
-    private String text;
-    private BookDto bookDto;
-    private LocalDateTime create;
+    private final String text;
+    private final BookDto bookDto;
+    private final LocalDateTime create;
 
     @Override
     public String toString() {
