@@ -15,6 +15,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,7 +35,7 @@ class AuthorControllerTest {
     @DisplayName("Should return list of authors")
     void testGetAllAuthors() throws Exception {
         AuthorDto authorDto = AuthorDto.builder().id("1").firstName("FName").lastName("LName").build();
-        BDDMockito.given(service.getAllAuthors()).willReturn(Set.of(authorDto));
+        given(service.getAllAuthors()).willReturn(Set.of(authorDto));
 
         this.mockMvc.perform(get("/authors"))
                 .andDo(print())

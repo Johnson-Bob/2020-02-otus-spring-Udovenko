@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +23,9 @@ public class AuthorController {
     @GetMapping("/authors")
     public List<AuthorModel> getAllAuthors() {
         Set<AuthorDto> allAuthors = service.getAllAuthors();
-        return toAuthorModelList(allAuthors);
+        return allAuthors.stream()
+                .map(this::toAuthorModel)
+                .collect(Collectors.toList());
     }
 
     private AuthorModel toAuthorModel(AuthorDto dto) {
@@ -35,16 +38,5 @@ public class AuthorController {
         authorModel.setFirstName(dto.getFirstName());
         authorModel.setLastName(dto.getLastName());
         return authorModel;
-    }
-
-    private List<AuthorModel> toAuthorModelList(Collection<AuthorDto> authorDtoList) {
-        if (authorDtoList == null) {
-            return Collections.emptyList();
-        }
-        List<AuthorModel> authorModelList = new ArrayList<>();
-        for (AuthorDto authorDto : authorDtoList) {
-            authorModelList.add(toAuthorModel(authorDto));
-        }
-        return authorModelList;
     }
 }
