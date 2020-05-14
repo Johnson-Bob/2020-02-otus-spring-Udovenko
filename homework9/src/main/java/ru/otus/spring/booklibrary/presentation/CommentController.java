@@ -7,7 +7,6 @@ import ru.otus.spring.booklibrary.service.CommentService;
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
-    private final BookController bookController;
     private final CommentService commentService;
 
     public void outputAllBookComments() {

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
@@ -29,6 +30,9 @@ public class Book {
 
     @Field(targetType = FieldType.ARRAY)
     private Set<Comment> comments;
+
+    @Version
+    private Long version;
 
     @PersistenceConstructor
     public Book(String id, String title, String genre, Set<Author> authors) {

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class CommentModel {
+    private String bookId;
     private String text;
     private LocalDateTime create;
 }

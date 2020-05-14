@@ -29,7 +29,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<AuthorDto> getAllAuthors() {
         return convertToSetAuthorDto(authorDao.findAll());
     }
