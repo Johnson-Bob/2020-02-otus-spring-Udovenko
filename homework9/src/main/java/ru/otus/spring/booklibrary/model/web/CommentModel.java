@@ -1,7 +1,6 @@
 package ru.otus.spring.booklibrary.model.web;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
