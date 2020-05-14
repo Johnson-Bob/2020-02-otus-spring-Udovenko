@@ -8,8 +8,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import org.springframework.context.annotation.Profile;
-import ru.otus.spring.booklibrary.model.entity.Comment;
-import ru.otus.spring.booklibrary.model.entity.Genre;
 
 import java.time.LocalDateTime;
 import java.util.List;

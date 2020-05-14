@@ -1,6 +1,5 @@
 package ru.otus.spring.booklibrary.dao;
 
-import com.github.mongobee.Mongobee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +10,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.booklibrary.bee.MongoBeeConfig;
 import ru.otus.spring.booklibrary.model.entity.Author;
-import ru.otus.spring.booklibrary.model.entity.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,39 +1,50 @@
 package ru.otus.spring.booklibrary.presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.spring.booklibrary.model.dto.AuthorDto;
+import ru.otus.spring.booklibrary.model.web.AuthorModel;
 import ru.otus.spring.booklibrary.service.AuthorService;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthorController {
-    private final ConsoleProcessor consoleProcessor;
-    private final AuthorService authorService;
 
-    public Set<AuthorDto> inputAuthors() {
-        Set<AuthorDto> result = new HashSet<>();
-        String hasNextAuthor;
-        do {
-            String firstName = consoleProcessor.waitAnswer("Please, type author first name");
-            String lastName = consoleProcessor.waitAnswer("Please, type author last name");
-            AuthorDto authorDto = AuthorDto.builder().firstName(firstName).lastName(lastName).build();
-            result.add(authorService.findOrSaveAuthor(authorDto));
+    private final AuthorService service;
 
-            hasNextAuthor = consoleProcessor.waitAnswer("Click \"Enter\" for input next author or type \"stop\"");
-        } while (!hasNextAuthor.equalsIgnoreCase("stop"));
-
-        return result;
+    @GetMapping("/authors")
+    public List<AuthorModel> getAllAuthors() {
+        Set<AuthorDto> allAuthors = service.getAllAuthors();
+        return toAuthorModelList(allAuthors);
     }
 
-    public void outputAllAuthors() {
-        String allAuthors = authorService.getAllAuthors().stream()
-                .map(AuthorDto::shortString)
-                .collect(Collectors.joining(", "));
-        consoleProcessor.outputString(allAuthors);
+    private AuthorModel toAuthorModel(AuthorDto dto) {
+
+        if (dto == null) {
+            return null;
+        }
+        AuthorModel authorModel = new AuthorModel();
+        authorModel.setId(dto.getId());
+        authorModel.setFirstName(dto.getFirstName());
+        authorModel.setLastName(dto.getLastName());
+        return authorModel;
+    }
+
+    private List<AuthorModel> toAuthorModelList(Collection<AuthorDto> authorDtoList) {
+        if (authorDtoList == null) {
+            return Collections.emptyList();
+        }
+        List<AuthorModel> authorModelList = new ArrayList<>();
+        for (AuthorDto authorDto : authorDtoList) {
+            authorModelList.add(toAuthorModel(authorDto));
+        }
+        return authorModelList;
     }
 }
