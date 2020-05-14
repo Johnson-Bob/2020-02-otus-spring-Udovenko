@@ -1,6 +1,9 @@
 package ru.otus.spring.booklibrary.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.booklibrary.model.dto.BookDto;
 import ru.otus.spring.booklibrary.model.dto.CommentDto;
+import ru.otus.spring.booklibrary.model.web.CommentModel;
 import ru.otus.spring.booklibrary.service.CommentService;
 
 import java.time.LocalDateTime;
@@ -55,10 +59,11 @@ class CommentControllerTest {
     @Test
     @DisplayName("should return status 'created' when new comment to book is added")
     void testAddCommentToBook() throws Exception {
+        CommentModel comment = getComment();
         willDoNothing().given(service).saveComment(any());
 
         mvc.perform(post("/books/comments")
-                .content(getJsonString())
+                .content(getJsonString(comment))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8"))
@@ -68,18 +73,31 @@ class CommentControllerTest {
     @Test
     @DisplayName("should return status 'ok' when comment is deleted")
     void testDeleteBookComment() throws Exception {
+        CommentModel comment = getComment();
         willDoNothing().given(service).saveComment(any());
 
         mvc.perform(delete("/books/comments")
-                .content(getJsonString())
+                .content(getJsonString(comment))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8"))
                 .andExpect(status().isOk());
     }
 
-    private String getJsonString() throws JsonProcessingException {
-        return "{\"bookId\":\"1cdfg56\",\"text\":\"Comment text\",\"create\":\"2020-05-14T21:35:15\"}";
+    private String getJsonString(CommentModel model) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper.writeValueAsString(model);
+    }
+
+    private CommentModel getComment() {
+        CommentModel comment = new CommentModel();
+        comment.setBookId("1cdfg56");
+        comment.setText("Comment text");
+        comment.setCreate(LocalDateTime.now());
+
+        return comment;
     }
 
 }
