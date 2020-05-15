@@ -15,12 +15,6 @@ public class BookDto {
     private final String genre;
     private final Set<AuthorDto> authors;
 
-    public Set<Author> getAuthors() {
-        return authors.stream()
-                .map(dto -> new Author(dto.getId(), dto.getFirstName(), dto.getLastName()))
-                .collect(Collectors.toSet());
-    }
-
     @Override
     public String toString() {
         return "\"" + bookTitle + "\" " + genre + " "

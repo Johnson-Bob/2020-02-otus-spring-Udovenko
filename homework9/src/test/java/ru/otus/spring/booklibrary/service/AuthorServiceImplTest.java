@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import ru.otus.spring.booklibrary.dao.AuthorDao;
 import ru.otus.spring.booklibrary.model.dto.AuthorDto;
 import ru.otus.spring.booklibrary.model.entity.Author;
+import ru.otus.spring.booklibrary.service.impl.AuthorServiceImpl;
 
 import java.util.Optional;
 

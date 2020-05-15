@@ -35,11 +35,12 @@ public class Book {
     private Long version;
 
     @PersistenceConstructor
-    public Book(String id, String title, String genre, Set<Author> authors) {
+    public Book(String id, String title, String genre, Set<Author> authors, Long version) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.authors = authors;
+        this.version = version;
     }
 
     public void addComment(Comment comment) {

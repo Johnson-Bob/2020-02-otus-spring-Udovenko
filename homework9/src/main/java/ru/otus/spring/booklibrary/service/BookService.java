@@ -5,10 +5,9 @@ import ru.otus.spring.booklibrary.model.dto.GenreDto;
 
 import java.util.List;
 
-public interface LibraryService {
+public interface BookService {
     BookDto addBookToLibrary(BookDto book);
     void deleteBookFromLibrary(BookDto bookDto);
-    List<BookDto> getAllBooksFromLibrary();
     List<BookDto> findBookByName(String name);
-    List<GenreDto> getAllGenres();
+    BookDto updateBook(BookDto bookDto);
 }

@@ -14,8 +14,12 @@ import ru.otus.spring.booklibrary.model.dto.CommentDto;
 import ru.otus.spring.booklibrary.model.web.CommentModel;
 import ru.otus.spring.booklibrary.service.CommentService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toCommentDto;
+import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toCommentModelList;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,50 +27,23 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/books/comments/{bookId}")
-    public List<CommentModel> outputAllBookComments(@PathVariable String bookId) {
+    public List<CommentModel> getAllBookComments(@PathVariable String bookId) {
         BookDto bookDto = BookDto.builder().id(bookId).build();
         List<CommentDto> comments = commentService.getAllBookComments(bookDto);
-        return comments.stream()
-                .map(this::toCommentModel)
-                .collect(Collectors.toList());
+        return toCommentModelList(comments);
     }
 
     @PostMapping("/books/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCommentToBook(@RequestBody CommentModel model) {
+    public void addCommentToBook(@Valid @RequestBody CommentModel model) {
         CommentDto commentDto = toCommentDto(model);
         commentService.saveComment(commentDto);
     }
 
     @DeleteMapping("/books/comments")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBookComment(@RequestBody CommentModel model) {
+    public void deleteBookComment(@Valid @RequestBody CommentModel model) {
         CommentDto commentDto = toCommentDto(model);
         commentService.deleteComment(commentDto);
-    }
-
-    private CommentModel toCommentModel(CommentDto dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        CommentModel commentModel = new CommentModel();
-        commentModel.setText(dto.getText());
-        commentModel.setCreate(dto.getCreate());
-        commentModel.setBookId(dto.getBookDto().getId());
-
-        return commentModel;
-    }
-
-    private CommentDto toCommentDto(CommentModel model) {
-        if (model == null) {
-            return null;
-        }
-
-        return CommentDto.builder()
-                .text(model.getText())
-                .bookDto(BookDto.builder().id(model.getBookId()).build())
-                .create(model.getCreate())
-                .build();
     }
 }

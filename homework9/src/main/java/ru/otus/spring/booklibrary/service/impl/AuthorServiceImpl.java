@@ -1,4 +1,4 @@
-package ru.otus.spring.booklibrary.service;
+package ru.otus.spring.booklibrary.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.booklibrary.dao.AuthorDao;
 import ru.otus.spring.booklibrary.model.dto.AuthorDto;
 import ru.otus.spring.booklibrary.model.entity.Author;
+import ru.otus.spring.booklibrary.service.AuthorService;
 
 import java.util.Optional;
 import java.util.Set;
 
-import static ru.otus.spring.booklibrary.service.DtoConverter.convertToAuthorDto;
-import static ru.otus.spring.booklibrary.service.DtoConverter.convertToSetAuthorDto;
+import static ru.otus.spring.booklibrary.service.impl.EntityDtoConverter.toAuthor;
+import static ru.otus.spring.booklibrary.service.impl.EntityDtoConverter.toAuthorDto;
+import static ru.otus.spring.booklibrary.service.impl.EntityDtoConverter.toSetAuthorDto;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +24,15 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public AuthorDto findOrSaveAuthor(AuthorDto dto) {
-        Optional<Author> optionalAuthor = authorDao.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
-        Author author = optionalAuthor.orElseGet(() -> authorDao.save(convertToAuthor(dto)));
+        final Optional<Author> optionalAuthor = authorDao.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
+        final Author author = optionalAuthor.orElseGet(() -> authorDao.save(toAuthor(dto)));
 
-        return convertToAuthorDto(author);
+        return toAuthorDto(author);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<AuthorDto> getAllAuthors() {
-        return convertToSetAuthorDto(authorDao.findAll());
-    }
-
-    private Author convertToAuthor(AuthorDto dto) {
-        return new Author(dto.getId(), dto.getFirstName(), dto.getLastName());
+        return toSetAuthorDto(authorDao.findAll());
     }
 }
