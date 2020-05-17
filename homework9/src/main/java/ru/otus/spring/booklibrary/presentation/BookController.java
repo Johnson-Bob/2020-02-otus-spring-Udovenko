@@ -42,8 +42,8 @@ public class BookController {
     }
 
     @GetMapping("/books/find")
-    public List<BookModel> findBookByName(@RequestParam String name) {
-        final List<BookDto> booksByName = bookService.findBookByName(name);
+    public List<BookModel> findBookByName(@RequestParam String title) {
+        final List<BookDto> booksByName = bookService.findBookByName(title);
         return toBookModelList(booksByName);
     }
 

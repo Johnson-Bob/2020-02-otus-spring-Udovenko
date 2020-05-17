@@ -27,27 +27,23 @@ public class BookServiceImpl implements BookService {
     private final AuthorService authorService;
 
     @Override
-    @Transactional
     public BookDto addBookToLibrary(BookDto bookDto) {
         final Set<Author> authors = findOrSaveAuthors(bookDto.getAuthors());
-        final Book newBook = new Book(null, bookDto.getBookTitle(), bookDto.getGenre(), authors, 0L);
+        final Book newBook = new Book(null, bookDto.getBookTitle(), bookDto.getGenre(), authors, null);
         return EntityDtoConverter.toBookDto(bookDao.save(newBook));
     }
 
     @Override
-    @Transactional
     public void deleteBookFromLibrary(BookDto bookDto) {
         bookDao.deleteById(bookDto.getId());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookDto> findBookByName(String name) {
         return toListBookDto(bookDao.findByTitle(name));
     }
 
     @Override
-    @Transactional
     public BookDto updateBook(BookDto bookDto) {
         final Set<Author>  authors = toAuthorSet(bookDto.getAuthors());
         final Book book = bookDao.findById(bookDto.getId()).orElseThrow();

@@ -20,7 +20,6 @@ public class CommentServiceImpl implements CommentService {
     private BookDao bookDao;
 
     @Override
-    @Transactional(readOnly = true)
     public List<CommentDto> getAllBookComments(BookDto bookDto) {
         return bookDao.findById(bookDto.getId())
                 .map(EntityDtoConverter::toListCommentDto)
@@ -28,7 +27,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void saveComment(CommentDto dto) {
         final Comment comment = new Comment(dto.getText(), LocalDateTime.now());
         final Book book = bookDao.findById(dto.getBookDto().getId()).orElseThrow();
@@ -37,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void deleteComment(CommentDto dto) {
         final Comment comment = new Comment(dto.getText(), dto.getCreate());
         final Book book = bookDao.findById(dto.getBookDto().getId()).orElseThrow();

@@ -16,7 +16,6 @@ public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    @Transactional(readOnly = true)
     public List<GenreDto> getAllGenres() {
         return genreDao.findAll().stream()
                 .map(g -> new GenreDto(g.getGenreName()))
