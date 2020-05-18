@@ -2,7 +2,6 @@ package ru.otus.spring.booklibrary.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.booklibrary.dao.AuthorDao;
 import ru.otus.spring.booklibrary.model.dto.AuthorDto;
 import ru.otus.spring.booklibrary.model.entity.Author;

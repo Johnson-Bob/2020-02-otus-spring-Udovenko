@@ -16,7 +16,6 @@ import ru.otus.spring.booklibrary.service.CommentService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toCommentDto;
 import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toCommentModelList;

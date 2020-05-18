@@ -2,7 +2,6 @@ package ru.otus.spring.booklibrary.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import ru.otus.spring.booklibrary.model.entity.Author;
 
 import java.util.Set;
 import java.util.stream.Collectors;

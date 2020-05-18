@@ -17,7 +17,6 @@ import ru.otus.spring.booklibrary.service.BookService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toBookDto;
 import static ru.otus.spring.booklibrary.presentation.ModelDtoConverter.toBookModel;
