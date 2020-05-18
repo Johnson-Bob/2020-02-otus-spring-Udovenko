@@ -7,7 +7,8 @@ class EditBook extends Component {
             title: '',
             genre: '',
             firstName: '', 
-            lastName: ''
+            lastName: '',
+            genres: []
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,25 +33,11 @@ class EditBook extends Component {
     }
 
     async componentDidMount() {
-        fetch('/books/find?title=My new book')
+        fetch('/genres')
         .then(response => response.json())
         .then(body => {
-            if(body.length == 0) {
-                this.setState(
-                    {   title: '',
-                        genre: '',
-                        firstName: '',
-                        lastName: ''
-                    }
-                );
-            } else {
-                this.setState(
-                    {   title: body[0].bookTitle,
-                        genre: body[0].genre,
-                        firstName: body[0].authors[0].firstName,
-                        lastName: body[0].authors[0].lastName
-                    }
-                );
+            if(body.length != 0) {
+                this.setState({genres: body});
             }
         });
     }
@@ -93,16 +80,19 @@ class EditBook extends Component {
                                     >
                                     Genre
                                 </label>
-                                <input
+                                <select
                                     className="form-control"
-                                    type="text"
                                     id="genre"
                                     placeholder="Genre"
                                     required
                                     name="genre"
                                     value={this.state.genre}
                                     onChange={this.handleChange}
-                                />
+                                >
+                                    {this.state.genres.map((value, index) => {
+                                        return <option key={index} value={value}>{value}</option>
+                                    })}
+                                </select>
                             </section>
                             <div className="form-row">
                                 <section className="col-sm-6 form-group">
