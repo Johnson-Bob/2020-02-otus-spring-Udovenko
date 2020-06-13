@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      database: book-library
+      host: 127.0.0.1
+      port: 27017
+server:
+  servlet:
+    context-path: /book-library/api/
