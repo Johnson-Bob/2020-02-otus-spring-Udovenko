@@ -8,11 +8,12 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest
 public class BookLibraryApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
+  @Test
+  public void contextLoads() {
+  }
 
-	@Configuration
-	@TestPropertySource(locations = {"classpath:application.yml"})
-	static class ApplicationTestConfig {}
+  @Configuration
+  @TestPropertySource(locations = {"classpath:application.yml"})
+  static class ApplicationTestConfig {
+  }
 }

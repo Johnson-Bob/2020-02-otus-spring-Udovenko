@@ -7,7 +7,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class BookLibraryApplication {
 
-	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(BookLibraryApplication.class, args);
-	}
+  public static void main(String[] args) {
+    ConfigurableApplicationContext context = SpringApplication.run(BookLibraryApplication.class,
+      args);
+  }
 }

@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GenreDto {
 
-    private final String genreName;
+  private final String genreName;
 
-    @Override
-    public String toString() {
-        return genreName;
-    }
+  @Override
+  public String toString() {
+    return genreName;
+  }
 }

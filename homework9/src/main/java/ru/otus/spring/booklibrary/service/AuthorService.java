@@ -1,10 +1,11 @@
 package ru.otus.spring.booklibrary.service;
 
-import ru.otus.spring.booklibrary.model.dto.AuthorDto;
-
 import java.util.Set;
 
+import ru.otus.spring.booklibrary.model.dto.AuthorDto;
+
 public interface AuthorService {
-    AuthorDto findOrSaveAuthor(AuthorDto dto);
-    Set<AuthorDto> getAllAuthors();
+  AuthorDto findOrSaveAuthor(AuthorDto dto);
+
+  Set<AuthorDto> getAllAuthors();
 }

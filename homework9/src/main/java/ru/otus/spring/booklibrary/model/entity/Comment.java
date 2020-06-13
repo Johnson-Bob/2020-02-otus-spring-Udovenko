@@ -1,14 +1,15 @@
 package ru.otus.spring.booklibrary.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,14 +17,14 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(exclude = {"create"})
 public class Comment {
 
-    private String text;
+  private String text;
 
-    @Field(name = "create", targetType = FieldType.DATE_TIME)
-    private LocalDateTime create;
+  @Field(name = "create", targetType = FieldType.DATE_TIME)
+  private LocalDateTime create;
 
-    @PersistenceConstructor
-    public Comment(String text, LocalDateTime create) {
-        this.text = text;
-        this.create = create;
-    }
+  @PersistenceConstructor
+  public Comment(String text, LocalDateTime create) {
+    this.text = text;
+    this.create = create;
+  }
 }
