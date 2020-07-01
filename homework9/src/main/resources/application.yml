@@ -8,4 +8,4 @@ spring:
       port: 27017
 server:
   servlet:
-    context-path: /book-library/api/
+    context-path: /book-library/
